@@ -111,5 +111,33 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result Update(ML.Usuario usuario)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.CineContext context = new DL.CineContext())
+                {
+                    int RowsAffected = context.Database.ExecuteSqlRaw($"PasswordUpdate '{usuario.Email}',@Password", new SqlParameter("@Password", usuario.Password));
+
+                    if (RowsAffected > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
     }
 }
